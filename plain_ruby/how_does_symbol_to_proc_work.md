@@ -49,6 +49,9 @@ end
 ## Reference
 
 - [How Does Symbol#to_proc Work?] from [benjamintan.io]
+- [implementation of Symbol#to_proc in ruby]
 
 [How Does Symbol#to_proc Work?]: http://benjamintan.io/blog/2015/03/16/how-does-symbol-to_proc-work/
 [benjamintan.io]: http://benjamintan.io/
+[implementation of Symbol#to_proc in ruby]: https://www.omniref.com/ruby/2.2.1/symbols/Symbol/to_proc
+
