@@ -1,0 +1,28 @@
+# Compile error when install some erlang dependency
+
+A problem came cross when I initialized a new repository with deps `exredis`.
+
+```
+> mix test
+Compiling src/eredis_parser.erl failed:
+src/eredis_parser.erl:26: can't find include lib "eunit/include/eunit.hrl"
+ERROR: compile failed while processing /home/upl1/code/pgzealot/deps/eredis: rebar_abort
+** (Mix) Could not compile dependency eredis, /home/upl1/.mix/rebar command failed. If you want to recompile this dependency, please run:
+mix deps.compile eredis
+
+> mix deps.compile eredis
+==> eredis (compile)
+Compiling src/eredis_parser.erl failed:
+src/eredis_parser.erl:none: undefined parse transform 'eunit_autoexport'
+ERROR: compile failed while processing /home/upl1/code/pgzealot/deps/eredis: rebar_abort
+** (Mix) Could not compile dependency eredis, /home/upl1/.mix/rebar command failed. If you want to recompile this dependency, please run:
+mix deps.compile eredis
+```
+
+It seems some parts of Erlang are not installed, and after
+
+```
+sudo apt-get install erlang-dev erlang-edoc erlang-eunit
+```
+
+this problem is resolved.
