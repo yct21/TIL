@@ -1,0 +1,9 @@
+Operator `New`
+===
+
+Function called with the new operator will cause two things:
+
+- Function will have a this context pointing to an empty object.
+- If you do not specify return, or this function will return a non-object value, this will get returned from such function.
+
+Referenced from [React Kungfu](http://reactkungfu.com/2015/07/why-and-how-to-bind-methods-in-your-react-component-classes/)
