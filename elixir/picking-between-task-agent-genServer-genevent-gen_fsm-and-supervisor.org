@@ -1,0 +1,26 @@
+* Picking between Task, Agent, GenServer, GenEvent, gen_fsm and Supervisor
+
+In Erlang/Elixir there several different modules to implement role of process.
+
+  + Task
+  + Agent
+  + GenServer
+  + GenEvent
+  + gen_fsm
+  + Supervisor
+
+This is how [[https://github.com/fishcakez][fishcakez]] choose between them.
+
+#+BEGIN_QUOTE
+A Task is for relatively simple work, likely to carry out a single IO or CPU bound job concurrently. It has helpers to return the result of its job to another process. It does not have helpers to be "long lived" like the other process types.
+An Agent is for sharing public state. It has helpers to update and fetch this state.
+A GenEvent is for sharing public events. It has helpers to dynamically add/remove/track different modules handling the events.
+A gen_fsm is for handling a finite state machine. It has helpers for switching between the discrete states and dispatching events.
+A Supervisor is for starting processes and reliably handling their failure. It has helpers to decide how to start processes/handle failure to provide fault tolerance.
+A GenServer is for a general usage when the use of the process does not immediately fit into just one of the above categories. It has helpers for making arbitrary async/sync calls.
+It is useful to reach for the behaviour which best describes the process for two reasons. Firstly that the helpers can act like a "rubber duck" and help to ask the right questions. For example with a Supervisor, what should happen if this process dies? Or with gen_fsm, what should happen when the process receives this event in that state?
+Secondly by choosing a behaviour it can help another person (or a future self) quickly understand the role of a process as many things are familiar/the same and there are many "clues" where to look for things. It also highlights important complexities that the behaviour is designed to help with. For example with Agents there are only certain calls where the state can change. Or with gen_fsm, where changes between discrete states occur.
+#+END_QUOTE
+
+* Reference
+  - [[https://github.com/elixir-lang/elixir/issues/3011][Github issue]]
