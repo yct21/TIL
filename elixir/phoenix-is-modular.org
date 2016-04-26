@@ -1,0 +1,24 @@
+* Phoenix is modular
+ Many Phoenix abstractions, such as endpoint, router, or controller, are
+ implemented as plugs. So there's nothing stops you from removing any part out
+ of plug chain.
+
+#+BEGIN_QUOTE
+When a request arrives, the Plug library will create a Plug.Conn struct (aka
+conn). This struct bundles various fields describing the request (e.g. the IP
+address of the client, the path, headers, cookies) together with the fields
+describing the response (e.g. status, body, headers). Once the conn struct is
+initialized, Plug will call our function to handle the request. The task of our
+code is to take the conn struct and return the transformed version of it with
+populated output fields.
+
+Additionally, a plug can be a module that implements two functions init/1 which provides the options, and call/2 which takes a conn and options, and returns the transformed conn.
+#+END_QUOTE
+
+For instance, a phoenix project without ecto, brunch and html views could be initialized with:
+
+#+BEGIN_SRC shell
+mix phoenix.new simple_server --no-ecto --no-brunch --no-html
+#+END_SRC
+
+Referenced from [[http://theerlangelist.com/article/phoenix_is_modular][phoenix modular]].
