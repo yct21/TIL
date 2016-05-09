@@ -1,0 +1,127 @@
+* Manage process with customized registry
+
+  Genserver support these 3 ways to start_link a process with a name:
+
+  - an atom as the name
+  - ~{:global, term}~ as the name
+  - ~{:via, module, term}~ as the name
+
+  We could define our customized process registry with the ~via~ tuple. The
+  registry should consists of these functions:
+
+  - a ~register_name/2~ to register a name with any valid elixir term
+  - a ~ungister_name/1~ to unregister a name
+  - a ~whereis_name/1~ to find the pid of process with a given name
+  - a ~send/2~ to send a message to a given process
+
+  A example:
+
+  #+BEGIN_SRC elixir
+  defmodule Chat.Registry do
+    use GenServer
+
+    # API
+    def start_link do
+      # We register our registry (yeah, I know) with a simple name,
+      # just so we can reference it in the other functions.
+      GenServer.start_link(__MODULE__, nil, name: :registry)
+    end
+
+    def whereis_name(room_name) do
+      GenServer.call(:registry, {:whereis_name, room_name})
+    end
+
+    def register_name(room_name, pid) do
+      GenServer.call(:registry, {:register_name, room_name, pid})
+    end
+
+    def unregister_name(room_name) do
+      GenServer.cast(:registry, {:unregister_name, room_name})
+    end
+
+    def send(room_name, message) do
+      # If we try to send a message to a process
+      # that is not registered, we return a tuple in the format
+      # {:badarg, {process_name, error_message}}.
+      # Otherwise, we just forward the message to the pid of this
+      # room.
+      case whereis_name(room_name) do
+        :undefined ->
+          {:badarg, {room_name, message}}
+        pid ->
+          Kernel.send(pid, message)
+          pid
+      end
+    end
+
+    # SERVER
+    def init(_) do
+      # We will use a simple Map to store our processes in
+      # the format %{"room name" => pid}
+      {:ok, Map.new}
+    end
+
+    def handle_call({:whereis_name, room_name}, _from, state) do
+      {:reply, Map.get(state, room_name, :undefined), state}
+    end
+
+    def handle_call({:register_name, room_name, pid}, _from, state) do
+      # Registering a name is just a matter of putting it in our Map.
+      # Our response tuple include a `:no` or `:yes` indicating if
+      # the process was included or if it was already present.
+      case Map.get(state, room_name) do
+        nil ->
+          {:reply, :yes, Map.put(state, room_name, pid)}
+        _ ->
+          {:reply, :no, state}
+      end
+    end
+
+    def handle_cast({:unregister_name, room_name}, state) do
+      # And unregistering is as simple as deleting an entry
+      # from our Map
+      {:noreply, Map.delete(state, room_name)}
+    end
+  end
+  #+END_SRC
+
+  Thus, we could implement Genserver with the registry before:
+
+  #+BEGIN_SRC elixir
+    defmodule Chat.Server do
+      use GenServer
+      # API
+      def start_link(name) do
+        # Instead of passing an atom to the `name` option, we send
+        # a tuple. Here we extract this tuple to a private method
+        # called `via_tuple` that can be reused in every function
+        GenServer.start_link(__MODULE__, [], name: via_tuple(name))
+      end
+
+      def add_message(room_name, message) do
+        # And the `GenServer` callbacks will accept this tuple the
+        # same way it accepts a pid or an atom.
+        GenServer.cast(via_tuple(room_name), {:add_message, message})
+      end
+
+      def get_messages(room_name) do
+        GenServer.call(via_tuple(room_name), :get_messages)
+      end
+
+      defp via_tuple(room_name) do
+        # And the tuple always follow the same format:
+        # {:via, module_name, term}
+        {:via, Chat.Registry, {:chat_room, room_name}}
+      end
+
+      # SERVER
+      # Genserver functions
+      # ...
+    end
+  #+END_SRC
+
+  Actually there's a tool [[https://github.com/uwiger/gproc][gproc]] that could simplify this process.
+
+** Reference
+
+   - [[https://m.alphasights.com/process-registry-in-elixir-a-practical-example-4500ee7c0dcc#.vu7ibs607][Process registry in Elixir: A practical example]]
