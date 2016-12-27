@@ -1,0 +1,70 @@
+* Writing documentation in elixir
+
+Elixir treats documentation as first-class citizen. It is written using Markdown.
+
+** Documentation != Comments
+
+Documentation and code comments are treated differently.
+
+- Documentation is for users of your Application Programming Interface (API).
+- Code comments are for developers reading the code. They are useful
+  to mark improvements, leave notes for developers reading the code.
+
+** Module attributes for documentation
+
+- ~@moduledoc~: attach documentation to a module.
+- ~@doc~: attach documentation to a function.
+- ~@typedoc~: attach documentation to types defined as part of typespecs.
+
+#+BEGIN_SRC elixir
+defmodule MyApp.Hello do
+  @moduledoc """
+  This is the Hello module.
+  """
+
+  @doc """
+  Says hello to the given `name`.
+
+  Returns `:ok`.
+
+  ## Examples
+
+  iex> MyApp.Hello.world(:john)
+  :ok
+
+  """
+  def world(name) do
+    IO.puts "hello #{name}"
+  end
+end
+#+END_SRC
+
+** Official recommendations for documentation:
+
+- Keep first paragraph concise and simple in one line. Tools like ExDoc use
+  first line to generate summary
+- Reference modules by their full name with backticks(`)
+- Reference functions by name and arity if they are local, as in ~hello/1~, or
+  by module, name and arity if pointing to an external module, as in ~MyApp.Hello.world/1~.
+- Reference a ~@callback~ by prepending ~c:~.
+- Reference a ~@type~ by prepending ~t:~.
+- Documentation is always per function and arity and not per clause.
+- Include examples in documentation.
+
+** Hidden and private module or function
+
+- Besides the modules and functions libraries provide as part of their public
+  interface, libraries may also implement important functionality that is not
+  part of their API. While these modules and functions can be accessed, they are
+  meant to be internal to the library and thus should not have documentation for
+  end users. The hidden module should be ensured not to be accidentally exposed
+  or imported, and its ~@moduledoc~ should be ~false~.
+- ~@doc false~ won't make a function private or hidden.
+- Start the function name with one or two underscores, for example, ~__add__/2~,
+  and add ~@doc false~, The compiler does not import functions with leading
+  underscores and they hint to anyone reading the code of their intended private usage.
+- Elixir warns if a private function has a ~@doc~.
+
+** Reference
+
+[[https://hexdocs.pm/elixir/master/writing-documentation.html][hexdoc - writing documents in elixir]]
