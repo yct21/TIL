@@ -1,0 +1,20 @@
+* Get out of the “shell-break” menu in IEx                       :elixir:iex:
+
+#+BEGIN_SRC
+iex(2)> x = fn (a, b) ->
+...(2)>   c + b
+BREAK: (a)bort (c)ontinue (p)roc info (i)nfo (l)oaded
+       (v)ersion (k)ill (D)b-tables (d)istribution
+#+END_SRC
+
+#+BEGIN_QUOTE
+So you start typing some code, realize you’ve made a mistake. You hit ctrl-c to cancel what you’ve entered, and you’re given a strange prompt, which Erlang calls the “shell-break”.
+
+The only 2 options you need to care about are (c) and (a). (c)ontinue is the option that takes you back to the normal entry mode, but if you want to continue–and this is really not obvious–you have to hit enter twice. (a) will exit the repl.
+
+This is pretty old behavior that is defined in BEAM, the virtual machine that interprets Elixir and Erlang code. The other option spews out a ton of information that is certain to come in handy, someday, if you’re debugging BEAM itself, but it’s overkill for now.
+#+END_QUOTE
+
+** References
+
+- [[https://www.promptworks.com/blog/getting-started-with-elixir-and-iex][prompwork.com]]
