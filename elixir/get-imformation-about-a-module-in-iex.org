@@ -1,0 +1,8 @@
+* Get imformation about a module in IEX                          :elixir:iex:
+#+BEGIN_SRC
+iex(4) Awesome.module_info(:exports)
+       [:beast_is_the_best_of_the_x_men/0, :very_cool/1]
+#+END_SRC
+
+** Reference
+- [[https://www.promptworks.com/blog/getting-started-with-elixir-and-iex][promptwork.com]]
