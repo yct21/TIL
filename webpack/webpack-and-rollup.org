@@ -1,0 +1,25 @@
+* Webpack and Rollup: the same but different
+
+** Webpack
+
+webpack was started in 2012 by Tobias Koppers to solve a hard problem that existing tools didn’t address: building complex single-page applications (SPAs). Two features in particular changed everything:
+
+- Code-splitting makes it possible to break your app apart into manageable chunks that can be loaded on-demand, meaning your users get an interactive site much faster than if they had to wait for the whole application to download and parse. You can do this manually, but, well… good luck.
+
+- Static assets such as images and CSS can be imported into your app and treated as just another node in the dependency graph. No more carefully placing your files in the right folders and hacked-together scripts for adding hashes to file URLs — webpack can take care of it for you.
+
+** Rollup
+
+Rollup was created for a different reason: to build flat distributables of JavaScript libraries as efficiently as possible, taking advantage of the ingenious design of ES2015 modules. Other module bundlers — webpack included — work by wrapping each module in a function, putting them in a bundle with a browser-friendly implementation of require, and evaluating them one-by-one. That’s great if you need things like on-demand loading, but otherwise it’s a bit of a waste, and it gets worse if you have lots of modules.
+
+ES2015 modules enable a different approach, which Rollup uses. All your code is put in the same place and evaluates in one go, resulting in leaner, simpler code that starts up faster. You can see it for yourself with the Rollup REPL.
+
+But there’s a trade-off: code-splitting is a much hairier problem, and at the time of writing Rollup doesn’t support it. Similarly, Rollup doesn’t do hot module replacement (HMR). And perhaps the biggest pain point for people coming to Rollup — while it handles most CommonJS files (via a plugin), some things just don’t translate to ES2015, whereas webpack handles everything you throw at it with aplomb.
+
+** Conclusion
+
+Use webpack for apps, and Rollup for libraries
+
+** Reference
+
+[[https://medium.com/webpack/webpack-and-rollup-the-same-but-different-a41ad427058c][Webpack and Rollup: the same but different]]
