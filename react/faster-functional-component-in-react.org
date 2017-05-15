@@ -1,0 +1,39 @@
+* Faster React Functional Components
+
+#+BEGIN_SRC js
+  ReactDOM.render(
+      <div>
+      -    <Avatar url={avatarUrl} />
+      +    {Avatar({ url: avatarUrl })}
+      <div>{commentBody}</div>
+      </div>,
+    mountNode
+  );
+
+  // Compiled JavaScript
+  ReactDOM.render(React.createElement(
+    'div',
+    null,
+    -  React.createElement(Avatar, { url: avatarUrl }),
+    +  Avatar({ url: avatarUrl }),
+    React.createElement(
+      'div',
+      null,
+      commentBody
+    )
+  ), mountNode);
+#+END_SRC
+
+#+BEGIN_QUOTE
+We just eliminated one big React.createElement call, and all React component lifecycle events! No need to wait for the React team to ship internal optimizations.
+
+To measure the change, I created this benchmark, the results are quite staggering! From just converting a class-based component to a functional one, we get a little 6% speedup. But by calling it as a simple function instead of mounting, we get a ~45﹪ total speed improvement.
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+In React 16, functional components are quite a bit faster than class components. On a side note, this optimization is something we’re aware of and have been talking about a bit recently. :)
+#+END_QUOTE
+
+** Reference
+
+- [[https://medium.com/missive-app/45-faster-react-functional-components-now-3509a668e69f][45% Faster React Functional Components, Now]]
