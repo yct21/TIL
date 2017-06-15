@@ -11,7 +11,7 @@ are made available for use by another JavaScript file. In Node.js, this is
 accomplished using the require() function. When a call like require(“foo”) is
 called within Node.js, there is a very specific sequence of steps performed.
 
-[[file:ECMAScript Modules vs. CommonJS/1*W9dyBkQ7nRT_YiaZupFhaw_2017-06-15_15-42-52.png]]
+[[file:../.assets/ECMAScript Modules vs. CommonJS Modules/1*W9dyBkQ7nRT_YiaZupFhaw_2017-06-15_22-19-50.png]]
 
 ** Process of loading a Nodejs module
 
