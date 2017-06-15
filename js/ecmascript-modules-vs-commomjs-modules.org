@@ -11,11 +11,11 @@ are made available for use by another JavaScript file. In Node.js, this is
 accomplished using the require() function. When a call like require(“foo”) is
 called within Node.js, there is a very specific sequence of steps performed.
 
-[[file:../.assets/ECMAScript Modules vs. CommonJS Modules/1*W9dyBkQ7nRT_YiaZupFhaw_2017-06-15_22-19-50.png]]
+[[../.assets/ECMAScript Modules vs. CommonJS Modules/1*W9dyBkQ7nRT_YiaZupFhaw_2017-06-15_22-19-50.png]]
 
 ** Process of loading a Nodejs module
 
-[[file:ECMAScript Modules vs. CommonJS/1*Rn5xTqjKdPZuG7VnqMzN1w_2017-06-15_15-43-20.png]]
+[[../.assets/ECMAScript Modules vs. CommonJS Modules/1*Rn5xTqjKdPZuG7VnqMzN1w_2017-06-15_22-29-00.png]]
 
 1. Resolving: resolve the specifier “foo” into an absolute file path to some
    kind of artifact that Node.js understands.
@@ -74,8 +74,6 @@ specification.
 Node.js can implement ESM’s effectively and a number of changes to the
 specification are being looked at in order to make things work better within the
 Node.js environment.
-
-[[file:ECMAScript Modules vs. CommonJS Modules/1*qIzBmArjTZUBuf5DMGCAqA_2017-06-15_21-49-48.png]]
 
 - Rather than loading the module using the wrapper function that is currently
   used for CommonJS modules, Node.js would use the ECMAScript module
