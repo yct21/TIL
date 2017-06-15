@@ -87,3 +87,8 @@ Node.js environment.
   possible to import a CommonJS module using import, it will not be possible to
   use the import statement from within a CommonJS module; and by default,
   require() will not be available within an ESM.
+
+** Reference
+
+- [[https://hackernoon.com/node-js-tc-39-and-modules-a1118aecf95e][Node.js, TC-39, and Modules]]
+- [[https://medium.com/webpack/the-state-of-javascript-modules-4636d1774358][The state of JavaScript modules]]
