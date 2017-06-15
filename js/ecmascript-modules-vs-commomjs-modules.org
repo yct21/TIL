@@ -1,0 +1,91 @@
+* ECMAScript Modules vs. CommonJS Modules
+
+> It turns out, Node.js and TC-39 have very different ideas of what a “module”
+is, how those are defined, and how they are loaded into memory and used.
+
+> From nearly the beginning, Node.js has had a module system that is derived
+from a fairly loosely defined specification called “CommonJS”.
+
+> Symbols exported by one JavaScript file (things like functions and variables)
+are made available for use by another JavaScript file. In Node.js, this is
+accomplished using the require() function. When a call like require(“foo”) is
+called within Node.js, there is a very specific sequence of steps performed.
+
+[[file:ECMAScript Modules vs. CommonJS/1*W9dyBkQ7nRT_YiaZupFhaw_2017-06-15_15-42-52.png]]
+
+** Process of loading a Nodejs module
+
+[[file:ECMAScript Modules vs. CommonJS/1*Rn5xTqjKdPZuG7VnqMzN1w_2017-06-15_15-43-20.png]]
+
+1. Resolving: resolve the specifier “foo” into an absolute file path to some
+   kind of artifact that Node.js understands.
+2. Loading: load file according to what kind of module that is resolved in step 1.
+   - If it's a Nodejs native module, the shared library would be dynamically
+     linked to current Nodejs process.
+   - If it's a JS or JSON file, the content of file would be read into memory,
+     and waiting for parsing and evaluation.
+3. Wrapping: If the loaded artifact is a JavaScript file, then Node.js currently
+   assumes that the file is a CommonJS module. The loaded JS file would be
+   wrapped inside a function.
+4. Evaluation and Caching
+
+** Difference of Ecmascript Module(ESM) and CommonJS Module(CJS)
+
+In the wrapping step of loading NodeJS module described above, The loaded
+content are wrapped in a function below.
+
+#+BEGIN_SRC js
+function (exports, require, module, __filename, __dirname) {
+  // origin loaded JS file content
+}
+#+END_SRC
+
+The important thing is, there is no way of determining in *advance* what symbols
+are going to be exported by the CJS until after the wrapper function is
+evaluated.
+
+This is a critical difference between CJS and ESM because while exports of a
+CommonJS module are defined dynamically while the wrapper function is being
+evaluated, the exports of an ESM are defined lexically. That is, the symbols
+exported by an ESM are determined when the JavaScript code is being parsed
+before it is actually evaluated.
+
+Before a ESM module is evaluated, an internal structure called a Module Record
+is created. Within this Module Record, among other key bits of information, is a
+static listing of the symbols that are exported by the module. These are
+identified by the parser looking for the use of the export keyword. For lack of
+a better term, the symbols in the Module Record are essentially pointers to
+things that do not yet exist. Only after this Module Record is constructed is
+the module code actually evaluated. While there are many details lurking in here
+that have been glossed over, the key point is that determining what symbols are
+exported by an ESM occurs *before* evaluation.
+
+Specifically: when I say ~import {m} from “foo”~, ESM currently requires that it
+is possible to determine that m is exported by “foo” before evaluation; but as
+we’ve already seen, since “foo” is a CommonJS module, it is not possible to
+determine that m is exported until after evaluation. The end result is that
+named exports and imports from CommonJS, a critically important feature of
+ECMAScript modules, simply would not be possible under the currently defined ESM
+specification.
+
+** TC-39
+
+> It turns out, however, that TC-39 cares an awful lot about making sure that
+Node.js can implement ESM’s effectively and a number of changes to the
+specification are being looked at in order to make things work better within the
+Node.js environment.
+
+[[file:ECMAScript Modules vs. CommonJS Modules/1*qIzBmArjTZUBuf5DMGCAqA_2017-06-15_21-49-48.png]]
+
+- Rather than loading the module using the wrapper function that is currently
+  used for CommonJS modules, Node.js would use the ECMAScript module
+  specification to parse.
+- Named imports from a CommonJS module would work only if there is not a
+ dependency cycle between the ESM and the CommonJS module.
+- Another limitation caused by the differences between CommonJS and ESM is that
+  any mutation to the CommonJS exports after the initial evaluation would not be
+  available as a named import.
+- While it will be possible to load an ESM using require() and it will be
+  possible to import a CommonJS module using import, it will not be possible to
+  use the import statement from within a CommonJS module; and by default,
+  require() will not be available within an ESM.
