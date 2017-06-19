@@ -1,0 +1,18 @@
+* Comparing achitecture of typescript and flowtype
+** Typescript achitecture
+TypeScript will walk through your program and build up a table of known types.
+As it discovers values and expressions it assigns types to them immediately.
+When TypeScript discovers an unknown type it must make a decision immediately,
+which means either assigning it to any or throwing an error.
+** Flow achitecture
+Flow will build up a graph of all your values and expressions and their
+relationships to one another. It will then start to assign types to each value
+and expression. If it finds an unknown type it will make it an "open" type and
+come back to it later.
+
+Once Flow has a full graph of your program it will start to connect all the
+dots, flowing types from one value to another. Open types take on the types of
+all the values that flow into them– the resulting type is called the inferred
+type.
+** Reference
+[[http://thejameskyle.com/adopting-flow-and-typescript.html][Adopting Flow & TypeScript]]
