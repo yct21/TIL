@@ -59,7 +59,7 @@ Displays an interactive list of the object passed to it.
 *** ~console.table(object)~:
 Displays an array or object as a table
 
-[[file:../.assets/The ~console~ Object of Javascript/1*nza7ZWxYG-_X47VJ54FtZg_2017-06-21_22-13-28.png]]
+[[../.assets/The console Object of Javascript/1*nza7ZWxYG-_X47VJ54FtZg_2017-06-21_22-13-28.png]]
 
 This method doesn't work in Chrome currently.
 
@@ -67,7 +67,7 @@ This method doesn't work in Chrome currently.
 
 This would output logs in different levels
 
-[[file:../.assets/The ~console~ Object of Javascript/1*9hJkBrf4uEXaC1PYe8bomQ_2017-06-21_22-15-43.png]]
+[[../.assets/The console Object of Javascript/1*9hJkBrf4uEXaC1PYe8bomQ_2017-06-21_22-15-43.png]]
 
 *** ~console.time()~
 
